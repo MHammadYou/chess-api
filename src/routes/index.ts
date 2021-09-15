@@ -1,9 +1,1 @@
-import express from "express";
-
-const router = express.Router();
-
-router.get('/', (req, res) => {
-  res.json({"msg": "Working on '/' route"});
-})
-
-export default router;
+export { default as randomRoute } from "./random-match";

@@ -8,9 +8,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-import indexRoute from "./routes/index";
+import { randomRoute } from "./routes"
 
-app.use('/', indexRoute);
+app.use('/', randomRoute);
 
 
 app.listen(PORT, () => `Listening on port: ${PORT}`);
