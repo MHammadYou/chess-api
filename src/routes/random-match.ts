@@ -5,7 +5,10 @@ const router = express.Router();
 
 
 interface MatchData {
+  result: string
   pgn: string
+  white: object
+  black: object
 }
 
 
@@ -19,12 +22,24 @@ router.get('/random/:player',  (req, res) => {
 
     .then(response => {
 
-      const data = response.data;
-      const pgnSplitArr = data.games[0].pgn.split('\n');
+      const data = response.data.games[0];
+
+      const white = data.white;
+      const black = data.black;
+
+      delete white["@id"];
+      delete black["@id"];
+
+      const pgnSplitArr = data.pgn.split('\n');
       const pgn = pgnSplitArr[pgnSplitArr.length - 2];
 
+      const result = pgn.slice(pgn.length - 3);
+
       const matchResult: MatchData = {
+        result,
         pgn,
+        white,
+        black,
       }
 
       res.json(matchResult);
@@ -33,6 +48,7 @@ router.get('/random/:player',  (req, res) => {
 
     .catch(error => {
       console.log(error);
+      res.json({"msg": "bad request"})
     })
 
 })
