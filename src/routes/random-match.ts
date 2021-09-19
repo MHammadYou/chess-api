@@ -1,4 +1,4 @@
-import express from "express";
+import express, {response} from "express";
 import axios from "axios";
 
 const router = express.Router();
@@ -15,7 +15,7 @@ interface MatchData {
 router.get('/random/:player',  (req, res) => {
 
   const username = req.params.player;
-  const url = `https://api.chess.com/pub/player/${username}/games/2007/07`;
+  const url = `https://api.chess.com/pub/player/${username}/games/2015/07`;
 
 
   axios.get(url)
@@ -48,9 +48,29 @@ router.get('/random/:player',  (req, res) => {
 
     .catch(error => {
       console.log(error);
-      res.json({"msg": "bad request"})
+      res.json({"msg": "No such player"})
     })
 
+})
+
+router.get('/:username', (req, res) => {
+
+  const username = req.params.username;
+
+  const url = `https://api.chess.com/pub/player/${username}/games/archives`;
+  axios.get(url)
+    .then(response => {
+
+      const data = response.data.archives[0];
+      axios.get(data)
+        .then(response => {
+          res.json(response.data.games);
+        })
+    })
+    .catch(error => {
+      console.log(error);
+      res.json({"msg": "err"})
+    })
 })
 
 export default router;
