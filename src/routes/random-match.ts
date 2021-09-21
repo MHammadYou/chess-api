@@ -29,21 +29,17 @@ router.get('/random/:player',  (req, res) => {
         .then(response => {
           const data = response.data.games;
           const game = data[Math.floor(Math.random()*data.length)];
-
-
-          const white = game.white;
-          const black = game.black;
-
-          delete white["@id"];
-          delete black["@id"];
+  
+          const white = (({rating, result, username}) => ({rating, result, username}))(game.white);
+          const black = (({rating, result, username}) => ({rating, result, username}))(game.black);
 
           const pgnSplitArr = game.pgn.split('\n');
           const pgn = pgnSplitArr[pgnSplitArr.length - 2];
 
-          const result = pgn.slice(pgn.length - 3);
+          const _result = pgn.slice(pgn.length - 3);
 
           const matchResult: MatchData = {
-            result,
+            result: _result,
             pgn,
             white,
             black,
@@ -54,8 +50,9 @@ router.get('/random/:player',  (req, res) => {
     })
 
     .catch(error => {
-      console.log(error);
-      res.json({"msg": "No such player"})
+      const data = error.response.data;
+      data.message = data.message.replace(new RegExp("\"", "g"), "'");
+      res.json(data);
     })
 
 })
