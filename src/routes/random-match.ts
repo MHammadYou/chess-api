@@ -23,13 +23,19 @@ router.get('/random/:player',  (req, res) => {
     .then(response => {
 
       const archives = response.data.archives;
-      const archive = archives[Math.floor(Math.random()*archives.length)];
+      let archive = archives[Math.floor(Math.random()*archives.length)];
+
+      if (archives.length <= 0) {
+        res.json({"msg": "No record found"});
+        return;
+      }
 
       axios.get(archive)
         .then(response => {
           const data = response.data.games;
           const game = data[Math.floor(Math.random()*data.length)];
-  
+
+          // returns an object with only rating, result and username
           const white = (({rating, result, username}) => ({rating, result, username}))(game.white);
           const black = (({rating, result, username}) => ({rating, result, username}))(game.black);
 
