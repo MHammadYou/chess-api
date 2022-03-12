@@ -12,5 +12,8 @@ import { randomRoute } from "./routes"
 
 app.use('/', randomRoute);
 
+app.get('/', (req, res) => {
+  res.redirect('random/hikaru')
+})
 
 app.listen(PORT, () => `Listening on port: ${PORT}`);
