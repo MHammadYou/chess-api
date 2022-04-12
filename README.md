@@ -1,3 +1,14 @@
-A simple chess API that returns a random match record for a requested player
+## Chess API
 
-/random/:username
+**A simple API that returns a random match record for a requested player**
+
+#### Routes
+
+###### Default Route
+>```
+>/random/hikaru
+>```
+>```
+>/random/:username
+>```
+
